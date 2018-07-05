@@ -1,7 +1,14 @@
 class ContactsController < ApplicationController
   def index
     @contacts = Contact.all.order(:id)
+    
+    search_terms = params[:search]
+    if search_terms
+      @contacts = @contacts.where("first_name ILIKE ? OR last_name ILIKE ? OR email ILIKE ?", "%" + search_terms + "%", "%" + search_terms + "%", "%" + search_terms + "%")
+    end
+
     render "index.json.jbuilder"
+
   end
 
   def show
